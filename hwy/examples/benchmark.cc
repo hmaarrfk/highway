@@ -35,7 +35,7 @@ namespace HWY_NAMESPACE {
 
 // These templates are not found via ADL.
 #if HWY_TARGET != HWY_SCALAR
-using hwy::HWY_NAMESPACE::CombineShiftRightBytes;
+using hwy::HWY_NAMESPACE::CombineShiftRightLanes;
 #endif
 
 class TwoArray {
@@ -195,7 +195,7 @@ struct BenchmarkDelta : public TwoArray {
     auto prev = Load(df, &a_[0]);
     for (; i < num_items; i += Lanes(df)) {
       const auto a = Load(df, &a_[i]);
-      const auto shifted = CombineShiftRightLanes<3>(a, prev);
+      const auto shifted = CombineShiftRightLanes<3>(df, a, prev);
       prev = a;
       Store(Sub(a, shifted), df, &b_[i]);
     }
